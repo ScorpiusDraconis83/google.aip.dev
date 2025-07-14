@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=eb3d4ea7">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=eb3d4ea7">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=9f4786bc">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=9f4786bc">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=eb3d4ea7"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=9f4786bc"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -183,7 +183,7 @@
       <a href="/client-libraries">Client libraries</a>
     </li>
     <li class="nav-item">
-      <a href="/apps">GSuite</a>
+      <a href="/apps">Workspace</a>
     </li>
     <li class="nav-item">
       <a href="/aog">Actions on Google</a>
@@ -490,6 +490,18 @@
       </a>
     </li>
     <li class="nav-item">
+      <a href="/185">
+        <span class="aip-number">185</span>
+        API Versioning
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/190">
+        <span class="aip-number">190</span>
+        Naming conventions
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="/191">
         <span class="aip-number">191</span>
         File and directory structure
@@ -630,6 +642,7 @@
 <li><a href="#uniformity">Uniformity</a></li>
 <li><a href="#repeated-fields">Repeated fields</a></li>
 <li><a href="#prepositions">Prepositions</a></li>
+<li><a href="#abbreviations">Abbreviations</a></li>
 <li><a href="#adjectives">Adjectives</a></li>
 <li><a href="#verbs">Verbs</a></li>
 <li><a href="#booleans">Booleans</a></li>
@@ -641,6 +654,10 @@
 </ul>
 </li>
 <li><a href="#further-reading">Further reading</a></li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#uri-vs-url">URI vs URL</a></li>
+</ul>
+</li>
 <li><a href="#changelog">Changelog</a></li>
 </ul>
 </div>
@@ -702,6 +719,8 @@ names <strong>should</strong> avoid including unnecessary words. In particular, 
 including adjectives that always apply and add little cognitive value. For
 example, a <code>proxy_settings</code> field might be as helpful as
 <code>shared_proxy_settings</code> if there is no unshared variant.</p>
+<p><strong>Important:</strong> Field names often appear in generated client surfaces. Ensure they 
+are appropriately descriptive and of suitable length.</p>
 <h3 id="case">Case</h3>
 <p>Field definitions in protobuf files <strong>must</strong> use <code>lower_snake_case</code> names.
 These names are mapped to an appropriate naming convention in JSON and in
@@ -734,11 +753,20 @@ design concern, such as an overly-restrictive field or a sub-optimal data type.
 This is particularly true regarding "with": a field named <code>book_with_publisher</code>
 likely indicates that the book resource may be improperly structured and worth
 redesigning.</p>
-<p><strong>Note:</strong> The word "per" is an exception to this rule, particularly in two
-cases. Often "per" is part of a unit (e.g. "miles per hour"), in which case the
-preposition must be present to accurately convey the unit. Additionally, "per"
-is often appropriate in reporting scenarios (e.g. "nodes per instance" or
-"failures per hour").</p>
+<p><strong>Note:</strong> The word "per" is an exception to this rule. See <a href="/141">AIP-141</a> for 
+guidance in the case where "per" is used as part of a unit (e.g. "miles per hour").</p>
+<h3 id="abbreviations">Abbreviations</h3>
+<p>For well known name abbreviations among software developers, such as "config"
+and "spec", the abbreviations <strong>should</strong> be used in API definitions instead of
+the full spelling. This will make the source code easy to read and write.
+Examples:</p>
+<ul>
+<li><code>config</code> (<strong>not</strong> <code>configuration</code>)</li>
+<li><code>id</code> (<strong>not</strong> <code>identifier</code>)</li>
+<li><code>info</code> (<strong>not</strong> <code>information</code>)</li>
+<li><code>spec</code> (<strong>not</strong> <code>specification</code>)</li>
+<li><code>stats</code> (<strong>not</strong> <code>statistics</code>)</li>
+</ul>
 <h3 id="adjectives">Adjectives</h3>
 <p>For uniformity, field names that contain both a noun and an adjective
 <strong>should</strong> place the adjective <em>before</em> the noun. For example:</p>
@@ -770,7 +798,10 @@ are an exception to this rule. For example, <code>is_new</code> (<strong>not</st
 <p>When using <code>bytes</code>, the contents of the field are base64-encoded when using
 JSON on the wire. Services <strong>should</strong> use <code>bytes</code> when there is a need to send
 binary contents over the wire, and <strong>should not</strong> ask the user to manually
-base64-encode a field into a <code>string</code> field.</p>
+base64-encode a field into a <code>string</code> field. The one exception is when the
+API is designed to handle data that is meant to be base64-encoded at rest and
+the double base64-encoding as a result of using <code>bytes</code> is undesirable - in
+this case, services <strong>may</strong> use a <code>string</code>.</p>
 <h3 id="uris">URIs</h3>
 <p>Field names representing URLs or URIs <strong>should</strong> always use <code>uri</code> rather than
 <code>url</code>. This is because while all URLs are URIs, not all URIs are URLs. Field
@@ -797,8 +828,19 @@ field <strong>should not</strong> have a uniqueness requirement.</p>
 <li>For naming fields representing quantities, see <a href="/141">AIP-141</a>.</li>
 <li>For naming fields representing time, see <a href="/142">AIP-142</a>.</li>
 </ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="uri-vs-url">URI vs URL</h3>
+<p>The guidance itself mentions that all URLs are URIs, but not all URIs are URLs.
+The goal of aligning on URI is to enable a more generalizable field, that can
+handle a variety of use cases, as well as drive standardization across APIs,
+creating a more coherent surface. At the same time, the requirement being a
+<strong>should</strong> allows for more specific terms when it truly merits it.</p>
 <h2 id="changelog">Changelog</h2>
 <ul>
+<li><strong>2025-03-10</strong>: Add rationale for URI guidance.</li>
+<li><strong>2024-12-20</strong>: Copy over abbreviations guidance from old design site.</li>
+<li><strong>2024-08-26</strong>: Codify exception to string and base64 guidance </li>
+<li><strong>2024-05-18</strong>: Documented the effect of field names on client surfaces.</li>
 <li><strong>2023-04-25</strong>: Field names <strong>must not</strong> be expressed as verbs.</li>
 <li><strong>2021-07-12</strong>: Normalized display name guidance to "should".</li>
 <li><strong>2021-04-07</strong>: Added base64 and bytes guidance.</li>

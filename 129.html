@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=eb3d4ea7">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=eb3d4ea7">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=9f4786bc">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=9f4786bc">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=eb3d4ea7"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=9f4786bc"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -183,7 +183,7 @@
       <a href="/client-libraries">Client libraries</a>
     </li>
     <li class="nav-item">
-      <a href="/apps">GSuite</a>
+      <a href="/apps">Workspace</a>
     </li>
     <li class="nav-item">
       <a href="/aog">Actions on Google</a>
@@ -490,6 +490,18 @@
       </a>
     </li>
     <li class="nav-item">
+      <a href="/185">
+        <span class="aip-number">185</span>
+        API Versioning
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/190">
+        <span class="aip-number">190</span>
+        Naming conventions
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="/191">
         <span class="aip-number">191</span>
         File and directory structure
@@ -728,14 +740,14 @@ field's name.</p>
 <h3 id="user-specified-fields">User-Specified Fields</h3>
 <p>For user-specified fields, the value in response from the service <strong>must</strong> be
 the same as provided by the create or update request. For string fields this
-means returning the value unchanged, with one exception: </p>
+means returning the value unchanged, with one exception:</p>
 <ul>
 <li>When a string field has a data type annotation, a normalized string that
   represents the given value <strong>may</strong> be returned.</li>
 </ul>
 <h3 id="normalizations">Normalizations</h3>
 <p>A field that is normalized by the service <strong>must</strong> be annotated with the
-<code>google.api.field_info</code> extension. See <a href="aip-202">AIP-202</a> for guidance on using
+<code>google.api.field_info</code> extension. See (<a href="/202">AIP-202</a>) for guidance on using
 this extension The allowed set of normalizations includes the following formats:</p>
 <ul>
 <li>uuid</li>
@@ -747,13 +759,13 @@ this extension The allowed set of normalizations includes the following formats:
 annotation.</p>
 <h2 id="rationale">Rationale</h2>
 <p>Server-modified and default values often make it harder to implement
-<a href="state-driven-clients">state-driven clients</a>. These clients are often unable to
+<a href="/9#declarative-clients">declarative clients</a>. These clients are often unable to
 tell when their desired state matches the current state for these fields, as the
 rules by which a server may modify and return values are complex, not public,
 and not repeatable.</p>
 <h3 id="rationale-for-single-owner-fields">Rationale for Single Owner Fields</h3>
 <p>When fields do not have a single owner they can cause issues for
-<a href="state-driven-clients">state-driven clients</a>. These clients may attempt to set
+<a href="/9#declarative-clients">declarative clients</a>. These clients may attempt to set
 values for fields that are overwritten by server set values, leading to the
 client entering an infinite loop to correct the change.</p>
 <h3 id="rationale-for-naming">Rationale for Naming</h3>
@@ -780,8 +792,8 @@ but instead the comparison method used to accurately compute if two values
 should be considered equal.</p>
 <h3 id="rationale-for-field-value-handling">Rationale for Field Value Handling</h3>
 <p>For fields not using an allowed normalization,
-<a href="./0009#declarative-clients">Declarative clients</a> will not be able to identify which changes are
-semantically meaningful. When a <a href="./0009#declarative-clients">Declarative client</a>
+<a href="/9#declarative-clients">Declarative clients</a> will not be able to identify which changes are
+semantically meaningful. When a <a href="/9#declarative-clients">Declarative client</a>
 sends a particular value it will ensure that the value is being returned by the
 service to validate it was set correctly.</p>
 <h2 id="changelog">Changelog</h2>
